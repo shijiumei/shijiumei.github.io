@@ -27,6 +27,7 @@ var state = init;
 // 连接信令服务器并根据信令更新状态机
 function conn(){
   // 建立socket.io
+  
 }
 ```
   
