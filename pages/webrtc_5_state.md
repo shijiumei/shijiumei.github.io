@@ -27,8 +27,44 @@ var state = init;
 // 连接信令服务器并根据信令更新状态机
 function conn(){
   // 建立socket.io
+  socket = io.connect();
   
+  socket.on('joined', (roomid, id)=> {
+    state = 'joined';
+    ..
+    createPeerConnection();
+    bindTracks();
+  }
+  
+  socket.on('otherjoin', (roomid)=> {
+    state = 'joined_conn';
+    ..
+    call();
+  }
+  
+  socket.on('full', (roomid, id)=> {
+    hangup();
+    socket.disconnect();
+    state = 'init';
+  }
+  
+  socket.on('left', (roomid, id)=> {
+    hangup();
+    socket.disconnect();
+    state = 'init';
+  }
+  
+  socket.on('bye', (room, id)=> {
+    state = 'joined_unbind;
+    hangup();
+  }
+  
+  roomid = getQueryVariable('room');
+  socket.emit('join', roomid);
 }
+
+...
+conn(); // 与信令服务器建立连接
 ```
   
   
